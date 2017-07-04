@@ -1,53 +1,28 @@
 {
-  "list": {
-    "demo": {
-      "secrets": [
-        "123456",
-        "123456"
-      ]
-    },
-    "test": {
-      "secrets": [
-        "123456",
-        "123456"
-      ]
-    }
-  },
   "demo": {
-    "plugins": {
-      "acl": {
-        "/": {
-          "consumers": [
-            "test"
-          ]
-        },
-        "/test": {
-          "consumers": [
-            "test"
-          ]
-        }
-      },
-      "ip_restriction": {
-        "/": {
-          "whitelist": [
-            "127.0.0.1",
-            "10.0.0.1"
-          ],
-          "blacklist": [
-            "127.0.0.2",
-            "10.0.0.2"
-          ]
-        }
-      },
+      "auths": [
+        "test"
+      ],
+      "secrets": [
+        "12345",
+        "12346"
+      ],
       "rate_limiting": {
-        "/": {
-          "under": 100,
-          "burst": 200
-        }
-      },
-      "response_status": 1,
-      "auth": 1,
-      "waf": 1
-    }
+        "under": 100,
+        "burst": 200
+      }
+  },
+  "test": {
+      "auths": [
+        "demo"
+      ],
+      "secrets": [
+        "1234567",
+        "1234568"
+      ],
+      "rate_limiting": {
+        "under": 100,
+        "burst": 200
+      }
   }
 }

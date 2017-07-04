@@ -1,5 +1,4 @@
 local cjson = require "cjson"
-local lm = require "resty.location.match"
 
 local tinsert = table.insert
 
@@ -42,24 +41,6 @@ function _M.load_module_if_exists(module_name)
     else
         return false, res
     end
-end
-
-function _M.get_location_conf(conf)
-    if conf then
-        local location_match = {}
-        for match, _ in pairs(conf) do
-            location_match[#location_match + 1] = match
-        end
-        local location = lm:match_location(ngx.var.uri, location_match)
-
-        if location then
-            return conf[location], location
-        end
-    end
-end
-
-function _M.get_location(location_list)
-    return lm:match_location(ngx.var.uri, location_list)
 end
 
 function _M.get_real_ip()

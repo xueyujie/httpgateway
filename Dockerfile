@@ -1,29 +1,31 @@
 ############################################################
 # 创建openresty环境的dockerfile
-# Based on Centos 7
+# Based on Centos 6.8
 ############################################################
-# Set the base image to Ubuntu
-FROM daocloud.io/centos:7
+# Set the base image to centos
+FROM centos:6.8
 # File Author / Maintainer
-MAINTAINER lvyalin lvyalin.lv.yl@gmail.com
+MAINTAINER lvyalin lvyalin.yl@gmail.com
 
-RUN yum install -y ftp vim wget crontabs gcc make git
+RUN yum install -y net-tools vsftpd vim wget crontabs gcc make openssh-server git && \
+ service sshd start && \
+ echo "root:Root1.pwd" | chpasswd && \
+ yum clean all
 
-RUN yum install -y readline-devel pcre-devel openssl-devel gcc perl-Digest-MD5
+RUN yum install -y yum-utils && \
+    yum-config-manager --add-repo https://openresty.org/package/centos/openresty.repo && \
+    yum install -y openresty && \
+    ln -s /usr/local/openresty/nginx/conf /etc/nginx && \
+    yum clean all
 
-# install openresty
-RUN wget https://openresty.org/download/openresty-1.11.2.3.tar.gz && \
-tar -xzvf openresty-1.11.2.3.tar.gz && \
-cd openresty-1.11.2.3 && \
-./configure && \
-make && \
-make install && \
-ln -s /usr/local/openresty/nginx/conf /etc/nginx && \
-ln -s -T /usr/local/openresty/bin/opm /usr/bin/opm && \
-ln -s -T /usr/local/openresty/bin/resty /usr/bin/resty
+ADD conf/vhosts /etc/nginx/
+ADD conf/gateway_http.conf /etc/nginx/
+ADD conf/gateway_server.conf /etc/nginx/
+ADD conf/nginx.conf /etc/nginx/
+ADD conf/service_data.conf /etc/nginx/
+ADD lua /usr/local/openresty/nginx/
 
-# install plugins
-opm get openresty/lua-resty-limit-traffic && \
-opm get hamishforbes/lua-resty-iputils && \
-opm get firesnow/lua-resty-location-match && \
-opm get firesnow/lua-resty-checkups
+EXPOSE 80
+EXPOSE 443
+
+CMD /usr/local/openresty/nginx/sbin/nginx;/bin/bash

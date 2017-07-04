@@ -1,5 +1,5 @@
 local _M = {
-    config = nil,
+    plugins_config = nil,
     loaded_plugins = nil,
     service_config = nil
 }
