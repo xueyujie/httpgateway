@@ -22,7 +22,7 @@ ADD conf/vhosts /etc/nginx/
 ADD conf/gateway_http.conf /etc/nginx/
 ADD conf/gateway_server.conf /etc/nginx/
 ADD conf/nginx.conf /etc/nginx/
-ADD conf/service_data.conf /etc/nginx/
+ADD conf/service_data.json /etc/nginx/
 ADD lua /usr/local/openresty/nginx/
 
 EXPOSE 80
